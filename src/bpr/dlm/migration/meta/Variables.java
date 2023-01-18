@@ -1,0 +1,26 @@
+/*
+ * Created on 2006. 1. 18.
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package bpr.dlm.migration.meta;
+
+/**
+ * @author deluxjun
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class Variables{
+	String mDB;
+	String mBefore;
+	String mAfter;
+	String mGroup;
+	
+	Variables(String db, String before, String groupid) throws Exception{
+		mDB = db;
+		mBefore = before;
+		mGroup = groupid;
+	}
+}

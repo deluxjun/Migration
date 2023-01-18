@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="KSC5601"?>                                                                                                                                                  
+<!DOCTYPE migration SYSTEM "migration.dtd">                                                                                                                                               
+<migration>                                                                                                                                                                               
+	<common delimiter="___" commit-count="1000" status-file="./IPS수출NEGO서류_status.ini"/>                                                                                            
+	                                                                                                                                                                                  
+	<databases>                                                                                                                                                                       
+		<database name="TBPRX"                                                                                                                                                    
+			url="jdbc:oracle:thin:@1.101.1.1:1521:TBPRX"                                                                                                                   
+			driver="oracle.jdbc.driver.OracleDriver"                                                                                                                          
+			userid="us_allown01"                                                                                                                                              
+			password="allown01"/>                                                                                                                                             
+			                                                                                                                                                                  
+<!--			url="jdbc:JSQLConnect://localhost/database=test"                                                                                                                  
+			driver="com.jnetdirect.jsql.JSQLDriver"-->                                                                                                                        
+<!--                                                                                                                                                                                          
+		<database name="TBPRX"                                                                                                                                                    
+			url="jdbc:oracle:thin:@baejunsoo:1521:TBPRX"                                                                                                                      
+			driver="oracle.jdbc.driver.OracleDriver"                                                                                                                          
+			userid="us_allown01"                                                                                                                                              
+			password="allown01"/>                                                                                                                                             
+-->                                                                                                                                                                                          
+		</databases>                                                                                                                                                              
+                                                                                                                                                                                          
+	<databank>                                                                                                                                                                        
+		<!-- ASIS = IPS ICM3032MST -->                                                                                                                                         
+		<source-files name="IPSNEGO">                                                                                                                                             
+			<source-file url="C:/work/Migration/IPS/dump_IPS수출NEGO/ALL0000.bak"/>                                                                              
+		</source-files>                                                                                                                                                           
+	</databank>                                                                                                                                                                       
+                                                                                                                                                                                          
+	<functions>                                                                                                                                                                       
+		<function name="new_docbrcd"                                                                                                                                              
+			db="TBPRX"                                                                                                                                                        
+			sql="select FC_DLM_GETNEWDOCBRCD('4') from dual" />                                                                                                               
+		<function name="new_sequence"                                                                                                                                             
+			db="TBPRX"                                                                                                                                                        
+			sql="SELECT US_ALLOWN01.SQ_CADRCV002_01.NEXTVAL FROM DUAL" />                                                                                                     
+		<function name="TO_DATE16"                                                                                                                                                
+			db="TBPRX"                                                                                                                                                        
+			sql="select TO_CHAR(TO_DATE(SUBSTR('$0',1,19),'YYYY-MM-DD HH24:MI:SS'),'YYYYMMDDHH24MISS') from dual" />      
+		<function name="SUBSTR"                                                                                                                                                
+			db="TBPRX"                                                                                                                                                        
+			sql="select SUBSTR('$0',$1,$2) from dual" />     
+		<function name="TRUNC"                                                                                                                                                
+			db="TBPRX"                                                                                                                                                        
+			sql="select TRUNC($0,2) from dual" />     			 			                                                    
+		<function name="CUR_CHECK"
+			db="TBPRX"
+			sql="SELECT DECODE( '$0','\' , 'KRW', 'ARA','ARS', 'AUD','AUD', 'B.B','BOB', 'BDT','BDT', 
+				'BEL','XXX', 'BRN','XXX', 'BUK','XXX', 'CHY','CNY', 'CLP','CLP', 'DJF','XXX', 'HNL','XXX',
+				'JFD','FJD', 'MXP','MXN', 'MYR','MYR', 'SOS','XXX', 'SRG','XXX', 'SVC','SVC', 'UYD','UYU', 'XCR','SCR','$0') FROM DUAL" />
+		<function name="GET_TODATE"
+			db="TBPRX"
+			sql="SELECT TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS') FROM DUAL"/>
+		<function name="MAPPING_FORMCODE"
+			db="TBPRX"
+			sql="SELECT DECODE('$0','001','33050386','10001') FROM DUAL" />
+	</functions>                                                                                                                                                                      
+                                                                                                                                                                                          
+	<rules>                                                                                                                                                                           
+		<rule name="RULE1" source="IPSNEGO"  report-file="./IPS수출NEGO서류.rpt">  
+		                                                                                                                                    
+			<source-field name="serial_no" group="M" position="0"/>
+                        <source-field name="ref_no" group="M" position="1"/>
+                        <source-field name="recv_date" group="M" position="2"/>
+                        <source-field name="recv_brno" group="M" position="3"/>
+                        <source-field name="cust_name" group="M" position="4"/>
+                        <source-field name="cust_no" group="M" position="5"/>
+                        <source-field name="buy_money" group="M" position="6"/>
+                        <source-field name="currency_code" group="M" position="7"/>
+                        <source-field name="buy_code" group="M" position="8"/>
+                        <source-field name="send_date" group="M" position="9"/>
+                        <source-field name="place_no" group="M" position="10"/>
+                        <source-field name="img_id" group="M" position="11"/>
+                        <source-field name="img_regdate" group="M" position="12"/>
+                        <source-field name="img_regsawon" group="M" position="13"/>
+                        <source-field name="except_code" group="M" position="14"/>
+                        <source-field name="create_date" group="M" position="15"/>
+                        <source-field name="lupdate_date" group="M" position="16"/>
+                        <source-field name="lupdate_code" group="M" position="17"/> 
+
+			<source-field name="page_num" group="I" position="0"/>
+			         
+			         
+			<source-field name="snd_state" group="L" position="0"/>     
+                        <source-field name="sawon_id" group="L" position="1"/>      
+                        <source-field name="set_date" group="L" position="2"/>      
+                        <source-field name="center_gu" group="L" position="3"/>     
+                        <source-field name="oms_code" group="L" position="4"/>      
+                        <source-field name="oms_sayu" group="L" position="5"/>      
+                        <source-field name="create_date" group="L" position="6"/>   
+                        <source-field name="lupdate_date" group="L" position="7"/>  
+                        <source-field name="lupdate_code" group="L" position="8"/>  
+
+
+			<source-field name="doc_categorycode" group="B" position="0"/>   
+			<source-field name="place_date" group="B" position="1"/>         
+			<source-field name="place_term" group="B" position="2"/>         
+			<source-field name="sawon_id" group="B" position="3"/>           
+
+                                                                                                      
+                                                                                                                                                                                          
+			<variable name="get_imagekey"   value="$NEW_IMAGEKEY,02,41,03,2010,00000000"/>                                                                                       
+			<variable name="get_sequence"   value="$NEW_SEQUENCE,02,41,14"/>   
+			<variable name="get_docbarcode" value="$new_docbrcd"/>                                                                                      
+	             
+	               <!-- 외환 작업 공통 --> 
+	               <target-fields db="TBPRX" table="FEX_COM001" groupid="M">                                                                                                         
+			    <target-field   name="WF_NO"                 type="string"      value="!get_sequence" />
+			    <target-field   name="IMG_KEY"               type="string"      value="!get_imagekey" />
+			    <target-field   name="BPR_UPMU_G"            type="string"      value="02" />
+			    <target-field   name="MAP_ID"                type="string"      value="41" />
+			    <target-field   name="WF_MNG_GRPCO_C"        type="string"      value="S003" />
+			    <target-field   name="WF_MNG_BRNO"           type="int"         value="=M.recv_brno" />
+			    <target-field   name="CUR_C"                 type="string"      value="$CUR_CHECK,=M.currency_code" />
+			    <target-field   name="FAMT"                  type="double"      value="$TRUNC,=M.buy_money" />
+			    <target-field   name="CUSNO"                 type="int"         value="=M.cust_no" />
+			    <target-field   name="CUSNM"                 type="string"      value="=M.cust_name" />
+			    <target-field   name="WCUR_YND_ACNO"         type="string"      value="=M.ref_no" />
+			    <!--<target-field   name="FOR_EXIM_REF_NO"       type="string"      value="" />-->
+			    <!--<target-field   name="EXRT_APL_G"            type="int"         value="" />-->
+			    <!--<target-field   name="WCUR_YND_AC_SCNO"      type="string"      value="" /> -->
+			    <!--<target-field   name="WCUR_YND_AMT"          type="int"         value="" /> -->
+			    <!--<target-field   name="FCUR_YND_ACNO"         type="string"      value="" /> -->
+			    <!--<target-field   name="FCUR_YND_AC_SCNO"      type="string"      value="" /> -->
+			    <!--<target-field   name="FCUR_YND_AMT"          type="int"         value="" /> -->
+			    <!--<target-field   name="SPEC_EXRT_APRVNO"      type="int"         value="" /> -->
+			    <!--<target-field   name="CENT_EXRT"             type="int"         value="" /> -->
+			    <!--<target-field   name="CUS_EXRT"              type="int"         value="" /> -->
+			    <!--<target-field   name="BAS_EXRT"              type="int"         value="" /> -->
+			    <!--<target-field   name="EXRT_UDAE_RT"          type="int"         value="" /> -->
+			    <!--<target-field   name="BOJNAMT_CUR_C"         type="string"      value="" /> -->
+			    <!--<target-field   name="BOJEUNGAMT"            type="int"         value="" /> -->
+			    <!--<target-field   name="FDCH_AMT"              type="int"         value="" /> -->
+			    <!--<target-field   name="FCSH_AMT"              type="int"         value="" /> -->
+			    <!--<target-field   name="PSTN_AMT"              type="int"         value="" /> -->
+			    <!--<target-field   name="IP_G"                  type="int"         value="" /> -->
+			    <!--<target-field   name="IP_DCH_AMT"            type="int"         value="" /> -->
+			    <!--<target-field   name="IP_CSH_AMT"            type="int"         value="" /> -->
+			    <!--<target-field   name="IP_BNKCHK_AMT"         type="int"         value="" /> -->
+			    <!--<target-field   name="IP_TJUM_AMT"           type="int"         value="" /> -->
+			    <!--<target-field   name="IP_SAMT"               type="int"         value="" /> -->
+			    <!--<target-field   name="WAMT"                  type="int"         value="" /> -->
+			    <!--<target-field   name="TRX_TRN"               type="int"         value="" /> -->                                                                                 
+			</target-fields>             
+			<!-- 수출매입추심  -->                                                                                                                                      
+                        <target-fields db="TBPRX" table="FEX_EXP003" groupid="M">                                                                                                                                                                     
+			    <target-field   name="WF_NO"                type="string"        value="!get_sequence"/>       
+                            <target-field   name="BUY_COLT_C"           type="int"           value="=M.buy_code"/>
+                            <!--<target-field   name="APRVNO"               type="int"           value=""/>-->
+                            <!--<target-field   name="KJ_MTH"               type="int"           value=""/>-->
+                            <!--<target-field   name="FCUR_KJ_JOGN_C"       type="int"           value=""/>-->
+                            <!--<target-field   name="KJ_JOGN_DCNT"         type="int"           value=""/>-->
+                            <!--<target-field   name="EXPT_TYPE_C"          type="int"           value=""/>-->
+                            <!--<target-field   name="PRC_JOGN_C"           type="int"           value=""/>-->
+                            <!--<target-field   name="SUIP_NAT_C"           type="string"        value=""/>-->
+                            <!--<target-field   name="LC_NO"                type="string"        value=""/>-->
+                            <!--<target-field   name="INVC_NO"              type="int"           value=""/>-->
+                            <!--<target-field   name="MFR_INF"              type="string"        value=""/>-->
+                            <!--<target-field   name="OPN_DT"               type="string"        value=""/>-->
+                            <!--<target-field   name="SHIP_DT"              type="string"        value=""/>-->
+                            <!--<target-field   name="HS_C_NO"              type="string"        value=""/>-->
+                            <!--<target-field   name="EXPT_DRSH_NO"         type="string"        value=""/>-->
+                            <!--<target-field   name="CLRN_DT"              type="string"        value=""/>-->
+                            <!--<target-field   name="CLRN_G"               type="int"           value=""/>-->
+                            <!--<target-field   name="CLRN_AMT"             type="int"           value=""/>-->
+                            <target-field   name="NEGO_DT"              type="string"        value="=M.recv_date"/>
+			 </target-fields>  
+			<!-- 이미지 이관(임시)--> 
+			 <target-fields db="TBPRX" table="COM_MIG001" groupid="I">      
+			     <target-field   name="IMG_KEY"               type="string"     value="!get_imagekey"/>
+			     <target-field   name="DOC_FORM_C"            type="string"     value="$MAPPING_FORMCODE,=I.page_num"/><!-- 수입승인서 :추후 Mapping 필요-->
+			     <target-field   name="IMG_VER"               type="string"     value="1"/>
+			     <target-field   name="IMG_UPMU_G"            type="string"     value="02"/>
+			     <target-field   name="IPS_ACT_C"             type="string"     value="F0201"/>
+			     <target-field   name="IMG_ID"                type="string"     value="=M.img_id"/>
+			     <target-field   name="IMG_IDX"               type="int"        value="=I.page_num"/>
+			     <target-field   name="IPS_BTCH_NO"           type="string"     value="=M.place_no"/>
+			     <target-field   name="IMG_MVO_BAS_YYMM"      type="string"     value="$SUBSTR,=M.recv_date,1,6"/>
+			     <target-field   name="IMG_MVO_YN"            type="int"        value="1"/>
+			     <target-field   name="DESC_CTNT1"            type="string"     value="=M.serial_no"/>
+		       </target-fields>   
+		       <!-- 외환수출입 이미지-->
+		       <target-fields db="TBPRX" table="COM_IMG008" groupid="I">                    
+			   <target-field   name="IMG_KEY"           type="string"      value="!get_imagekey"/>         
+			   <target-field   name="DOC_FORM_C"        type="string"      value="$MAPPING_FORMCODE,=I.page_num"/><!-- 수입승인서 :추후 Mapping 필요-->
+			   <target-field   name="IMG_VER"           type="string"      value="1"/>         
+			   <target-field   name="IMG_UPMU_G"        type="string"      value="02"/>          
+			   <target-field   name="SCN_GRPCO_C"       type="string"      value="S003"/>           
+			   <target-field   name="SCN_BRNO"          type="int"         value="9005"/><!--신한은행 IPS실 번호 -->         
+			   <target-field   name="SCN_HWNNO"         type="string"      value="$SUBSTR,I.img_regsawon,3,8"/><!--자릿수가 틀림 -->  
+			   <target-field   name="DATA_DR_DT"        type="string"      value="=M.img_regdate"/>          
+			   <target-field   name="IMG_MVO_YN"        type="int"         value="1"/>  
+		      </target-fields>	                                                                                                      
+                      <target-fields db="TBPRX" table="DLM_DOC001" groupid="M">       
+		           <target-field   name="DOCXBRCD"    type="string"        value="!get_docbarcode"/>       
+                           <target-field   name="DLMBIZID"    type="int"           value="2"/>     <!-- 물류대상 업무구분 -->       
+                           <target-field   name="DLMGBNID"    type="string"        value="FE02"/>  <!-- 물류대상종류ID:수출-->       
+                           <target-field   name="DLMDOCID"    type="string"        value="FE0201"/><!-- 물류대상문서ID:수출입신용장 -->       
+                           <target-field   name="DOCCREGB"    type="int"           value="1"/>       
+                           <target-field   name="DOCXSTAT"    type="int"           value="7"/>       
+                           <target-field   name="BRCDGUBN"    type="int"           value="1"/>       
+                           <target-field   name="MAINBRCD"    type="string"        value="!get_docbarcode"/>       
+                           <target-field   name="BOXXBRCD"    type="string"        value="SF1812005121212201"/><!-- 예외: BOXBAR 코드 생성-->       
+                           <target-field   name="STRORDSN"    type="int"           value="$SUBSTR,=M.place_no,14,1"/> <!-- place_no의 마지막seqNo-->       
+                           <target-field   name="CRETDTTM"    type="string"        value="$GET_TODATE"/>       
+                           <target-field   name="CREAGRPC"    type="string"        value="S003"/>        <!--   생성점그룹사CODE -->
+                           <target-field   name="CREADEPT"    type="int"           value="=M.recv_brno"/><!--   생성점번호       -->
+                           <target-field   name="CURRGRPC"    type="string"        value="S003"/>       
+                           <target-field   name="CURRDEPT"    type="int"           value="9005"/>        <!--현 위치점번호 -->       
+                           <target-field   name="OLDDOCBC"    type="string"        value="=M.place_no"/>       
+                           <!--<target-field   name="CREAUSER"    type="string"        value=""/>   생성행원번호     -->
+                      </target-fields>	     
+		      <target-fields db="TBPRX" table="DLM_DOC004" groupid="M">       
+		          <target-field         name="DOCXBRCD"     type="string"     value="!get_docbarcode"/>
+			  <target-field         name="REFRNCNO"     type="string"     value="=M.ref_no"/>
+			  <target-field         name="CUSTGRPC"     type="string"     value="S003"/>
+			  <target-field         name="CUSTNMBR"     type="int"        value="=M.cust_no"/>
+			  <target-field         name="TRXXDATE"     type="string"     value="=M.recv_date"/>
+			  <target-field         name="OWNRGRPC"     type="string"     value="S003"/>
+			  <target-field         name="OWNRDEPT"     type="int"        value="=M.recv_brno"/>
+			  <target-field         name="IMAGEKEY"     type="string"     value="!get_imagekey"/>
+			  <target-field         name="CUSTNAME"     type="string"     value="=M.cust_name"/>
+		      </target-fields>	     		                                                                                                       	
+		</rule>                                                                                                                                                                   
+	</rules>                                                                                                                                                                          
+</migration>                                                                                                                                                                              
