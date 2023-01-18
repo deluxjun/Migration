@@ -1,11 +1,5 @@
-# Transaction Monitoring Server
+# Database Migration Program
 
-## Java application transaction Monitoring Server
-
-<h2 align="center">
-  <img src="https://github.com/deluxjun/Monitor-Server/blob/master/Monitor-page1.png" alt="Monitor Server" />
-  <br>
-</h2>
 
 ## Features
 
@@ -14,8 +8,6 @@
 ⚡️ dumpsam.Main collects data with SQL query and makes SAM files, settings files is ini file\
 ⚡️ Makes migrated information\
 ⚡️ Perform for every database that support JDBC\
-⚡️ Perform group data migration for data integration\
-
 
 ## Authors
 
